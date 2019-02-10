@@ -111,28 +111,15 @@ var ruter = {
           weight:2,
           color:'rgb(0, 140, 255)',
         })
-      }).addTo(map)
+      }).addTo(utLayer)
     },
     addHytta : function(hytta){
         L.marker( hytta.points,{
           weight:3,
           color:'rgb(162, 0, 0)'
-        }).bindPopup(ruter.ut.hyttaPopup(hytta)).addTo(map)
+        }).bindPopup(ruter.ut.hyttaPopup(hytta)).addTo(utLayer)
     },
     load : function(){
-        // hytter
-        if('ut_hytter' in localStorage){
-          JSON.parse(localStorage['ut_hytter']).map(ruter.ut.addTur)
-        }else{
-          $.ajax({
-            url:'./ruter/ut/hytter.json',
-            method:'get',
-            success:function(data){
-              localStorage['ut_hytter'] = JSON.stringify(data)
-              data.map(ruter.ut.addHytta)
-            }
-          })
-        };
         // ruter
         if('ut_ruter' in localStorage){
           JSON.parse(localStorage['ut_ruter']).map(ruter.ut.addTur)
@@ -143,6 +130,19 @@ var ruter = {
             success:function(data){
               localStorage['ut_ruter'] = JSON.stringify(data)
               data.map(ruter.ut.addTur)
+            }
+          })
+        };
+        // hytter
+        if('ut_hytter' in localStorage){
+          JSON.parse(localStorage['ut_hytter']).map(ruter.ut.addHytta)
+        }else{
+          $.ajax({
+            url:'./ruter/ut/hytter.json',
+            method:'get',
+            success:function(data){
+              localStorage['ut_hytter'] = JSON.stringify(data)
+              data.map(ruter.ut.addHytta)
             }
           })
         };
