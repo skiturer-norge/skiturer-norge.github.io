@@ -71,38 +71,6 @@ var tilesDb = {
     }
 };
 
-function turPopup(tur){
-    return("<div><a target='_bank' href='"+tur.href+"'>"+tur.name+"</a></div>")
-};
-
-function hyttaPopup(tur){
-    return("<div><a target='_bank' href='"+tur.href+"'>"+tur.name+" ("+tur.type+")</a></div>")
-};
-
-function addTur(tur){
-  L.polyline( tur.points, {
-    weight:2,
-    color:'rgb(0, 140, 255)',
-  }).bindPopup(turPopup(tur)).on('mouseover', function (e) {
-    e.target.setStyle({
-      weight:4,
-      color:'rgb(2, 119, 215)',
-    });
-  }).on('mouseout', function (e) {
-    e.target.setStyle({
-      weight:2,
-      color:'rgb(0, 140, 255)',
-    })
-  }).addTo(map)
-};
-
-function addHytta(hytta){
-    L.marker( hytta.points,{
-      weight:3,
-      color:'rgb(162, 0, 0)'
-    }).bindPopup(hyttaPopup(hytta)).addTo(map)
-}
-
 var freezeMap = {
   on:function(){
     map.dragging.disable();
@@ -118,4 +86,69 @@ var freezeMap = {
     map.scrollWheelZoom.enable();
     zoom._container.style.visibility='visible';
   },
+}
+
+
+var ruter = {
+  ut : {
+    turPopup :function (tur){
+        return("<div><a target='_bank' href='"+tur.href+"'>"+tur.name+"</a></div>")
+    },
+    hyttaPopup :function (tur){
+        return("<div><a target='_bank' href='"+tur.href+"'>"+tur.name+" ("+tur.type+")</a></div>")
+    },
+    addTur:function(tur){
+      L.polyline( tur.points, {
+        weight:2,
+        color:'rgb(0, 140, 255)',
+      }).bindPopup(ruter.ut.turPopup(tur)).on('mouseover', function (e) {
+        e.target.setStyle({
+          weight:4,
+          color:'rgb(2, 119, 215)',
+        });
+      }).on('mouseout', function (e) {
+        e.target.setStyle({
+          weight:2,
+          color:'rgb(0, 140, 255)',
+        })
+      }).addTo(map)
+    },
+    addHytta : function(hytta){
+        L.marker( hytta.points,{
+          weight:3,
+          color:'rgb(162, 0, 0)'
+        }).bindPopup(ruter.ut.hyttaPopup(hytta)).addTo(map)
+    },
+    load : function(){
+        // hytter
+        if('ut_hytter' in localStorage){
+          JSON.parse(localStorage['ut_hytter']).map(ruter.ut.addTur)
+        }else{
+          $.ajax({
+            url:'./ruter/ut/hytter.json',
+            method:'get',
+            success:function(data){
+              localStorage['ut_hytter'] = JSON.stringify(data)
+              data.map(ruter.ut.addHytta)
+            }
+          })
+        };
+        // ruter
+        if('ut_ruter' in localStorage){
+          JSON.parse(localStorage['ut_ruter']).map(ruter.ut.addTur)
+        }else{
+          $.ajax({
+            url:'./ruter/ut/skiturer.json',
+            method:'get',
+            success:function(data){
+              localStorage['ut_ruter'] = JSON.stringify(data)
+              data.map(ruter.ut.addTur)
+            }
+          })
+        };
+    }
+  },
+  init:function(){
+    this.ut.load()
+  }
 }

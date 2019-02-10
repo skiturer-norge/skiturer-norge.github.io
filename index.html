@@ -26,10 +26,11 @@
   <!-- leaflet modal -->
   <link rel="stylesheet" href="./libs/leaflet-modal/leaflet.modal.css" />
   <script src="./libs/leaflet-modal/Leaflet.Modal.js"></script>
+  <!-- github -->
+  <script src="https://unpkg.com/github-api/dist/GitHub.bundle.min.js"></script>
 
   <!-- vector grid -->
   <!-- <script type="text/javascript"  src="https://unpkg.com/leaflet.vectorgrid@latest/dist/Leaflet.VectorGrid.bundled.js"></script> -->
-
   <!-- <link rel="stylesheet" href="/libs/leaflet.css" /> -->
   <!-- <script src="./libs/leaflet.js"></script> -->
   <!-- <script src="./libs/jquery.min.js"></script> -->
@@ -191,22 +192,8 @@ localforage.getItem('bounds').then(function(bounds){
   }
 })
 
-// load data
-if('ut_hytter' in localStorage){
-  JSON.parse(localStorage['ut_turer']).map(addTur)
-  JSON.parse(localStorage['ut_hytter']).map(addHytta)
-}else{
-  $.ajax({
-    url:'./ut_data.json',
-    method:'get',
-    success:function(data){
-      data['turer'].map(addTur)
-      localStorage['ut_turer'] = JSON.stringify(data['turer'])
-      data['hytter'].map(addHytta)
-      localStorage['ut_hytter'] = JSON.stringify(data['hytter'])
-    }
-  })
-}
+// load routes
+ruter.init()
 
 // set location
 map.setView([60.6585, 6.4653], 12);
