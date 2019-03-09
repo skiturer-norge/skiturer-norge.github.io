@@ -76,3 +76,19 @@ body{
 .modalButton:hover{
   background: rgb(207, 19, 19);
 }
+.userRuteInfo{
+  width: 350px;
+  min-height: 120px;
+}
+.userRuteInfo h3{
+  margin-bottom: 3px;
+}
+.userRuteInfo p{
+  margin: 6px 0px;
+}
+.ruteToggle{
+  cursor:pointer;
+}
+.userRuteInfo.description{
+  overflow-y: scroll;
+}
