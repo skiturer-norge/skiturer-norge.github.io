@@ -64,8 +64,7 @@ var ruter = {
     info : {
        title: 'New route',
        description: 'This is an empty description',
-       tracks : [
-       ]
+       tracks : []
     },
     popup:function(el){
       let track = ruter.draw.info.tracks.filter(function(i){return(i.leaflet_id==el._leaflet_id)})[0]
@@ -78,12 +77,43 @@ var ruter = {
         "</div>"
       return(htmlStr)
     },
+    saveLocal:function(){
+      this.info.tracks = this.info.tracks.map(function(i){
+        i.pts = ruter.draw.layer._layers[i.leaflet_id]._latlngs
+        return(i)
+      })
+      localStorage['currentDraw'] = JSON.stringify(this.info)
+    },
+    loadLocal:function(){
+      if(!('currentDraw' in localStorage)){
+        return
+      }
+      this.info = JSON.parse(localStorage['currentDraw'])
+      this.info.tracks = this.info.tracks.map(function(i){
+        let newLine = L.polyline(i.pts,{
+          weight : 2,
+          color: 'red',
+          opacity: 1
+        }).on('mouseover', function (e) {
+          e.target.setStyle({
+            weight:4
+          });
+        }).on('mouseout', function (e) {
+          e.target.setStyle({
+            weight:2
+          })
+        }).bindPopup(ruter.draw.popup).addTo(ruter.draw.layer);
+        i.leaflet_id = newLine._leaflet_id;
+        return(i)
+      })
+    },
     infoToggle:function(e){
       var targetType = e.target.classList.contains('description') ? 'description' : 'title';
       if(e.target.classList.contains('save')){
         let newVal = $('.'+targetType+'.input').children().eq(0).val()
         ruter.draw.info[targetType] = newVal
         $('.'+targetType+' .display').html(newVal)
+        ruter.draw.saveLocal()
       }
       $('.userRuteInfo .'+targetType).each(function(i,el){
         if(el.classList.contains('ruteToggle')){
@@ -122,13 +152,11 @@ var ruter = {
             weight:2
           })
         }).bindPopup(ruter.draw.popup).addTo(ruter.draw.layer);
-
         ruter.draw.info.tracks.push({ leaflet_id: newLine._leaflet_id, type: 'both', optionNo : (ruter.draw.info.tracks.length+1) });
       });
       map.on('draw:toolbarclosed', function (event) {
         $('div.leaflet-draw-section').eq(1).hide()
       });
-
       map.on('draw:toolbaropened', function (event) {
         $('div.leaflet-draw-section').eq(1).show()
       });
@@ -137,19 +165,57 @@ var ruter = {
       });
       map.on('draw:editstop', function (event) {
         $('div.leaflet-draw-section').eq(1).hide()
+        ruter.draw.saveLocal()
       });
       map.on('draw:deletestart', function (event) {
         $('div.leaflet-draw-section').eq(1).show()
       });
       map.on('draw:deletestop', function (event) {
         $('div.leaflet-draw-section').eq(1).hide()
+        ruter.draw.saveLocal()
       });
       map.on('draw:save', function (event) {
-        console.log('save')
-        console.log(JSON.parse(localStorage['localRoute']))
+        ruter.draw.saveLocal();
+        var xml = gpx.getXML(ruter.draw.info);
+        var fileName = ruter.draw.info.title.replace(/\W+/g,'_')+'.gpx'
+        var a = document.createElement('a');
+        a.setAttribute('href', 'data:text/xml;charset=utf-8,' + encodeURIComponent(xml));
+        a.setAttribute('download', fileName);
+        a.click();
+      });
+      map.on('draw:save', function (event) {
+        ruter.draw.saveLocal();
+        var xml = gpx.getXML(ruter.draw.info);
+        console.log(xml)
       });
     },
-    saveClick : function(e){e.preventDefault();e.stopPropagation();map.fire('draw:editstop');map.fire('draw:save')},
+    saveClick : function(e){},
+    addButtons:function(){
+      this.control._container.children[0].children[0].children[0].style = "background-image: url(https://img.icons8.com/material/24/000000/edit.png);background-size: 20px;background-position: center;"
+      $('div.leaflet-draw-section').eq(1).hide()
+      $('div.leaflet-draw-section').eq(1).children().append(`
+        <a class="leaflet-draw-edit-save leaflet-enabled" href="#"
+          onclick="map.fire('draw:editstop');map.fire('draw:save')"
+          title="Save to file">
+          <span class="sr-only">Save to file</span></a>
+        `)
+      $('.leaflet-draw-edit-save').css({
+        backgroundImage: 'url(https://img.icons8.com/ios/32/000000/save-as.png)',
+        backgroundSize: '15px',
+        backgroundPosition: 'center'
+      })
+      // $('div.leaflet-draw-section').eq(1).children().append(`
+      //   <a class="leaflet-draw-edit-publish leaflet-enabled" href="#"
+      //     onclick="map.fire('draw:editstop');map.fire('draw:publish')"
+      //     title="Publish">
+      //     <span class="sr-only">Publish</span></a>
+      //   `)
+      // $('.leaflet-draw-edit-publish').css({
+      //   backgroundImage: 'url(https://img.icons8.com/ios-glyphs/30/000000/internet.png)',
+      //   backgroundSize: '15px',
+      //   backgroundPosition: 'center'
+      // })
+    },
     init:function(map){
       this.control = new L.Control.Draw(
         {
@@ -175,15 +241,8 @@ var ruter = {
       this.layer.addTo(map)
       this.control.addTo(map);
       this.addEvents(map);
-      this.control._container.children[0].children[0].children[0].style = "background-image: url(https://img.icons8.com/material/24/000000/edit.png);background-size: 20px;background-position: center;"
-      $('div.leaflet-draw-section').eq(1).hide()
-      var button ='<a class="leaflet-draw-edit-save leaflet-enabled" href="#" onclick="ruter.draw.saveClick(event)" title="Save route"><span class="sr-only">Save route</span></a>'
-      $('div.leaflet-draw-section').eq(1).children().append(button)
-      $('.leaflet-draw-edit-save').css({
-        backgroundImage: 'url(https://img.icons8.com/ios/32/000000/save-as.png)',
-        backgroundSize: '15px',
-        backgroundPosition: 'center'
-      })
+      this.addButtons();
+      this.loadLocal();
     }
   },
   init:function(map){
