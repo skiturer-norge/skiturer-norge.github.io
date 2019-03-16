@@ -185,13 +185,24 @@ var ruter = {
         a.setAttribute('download', fileName);
         a.click();
       });
-      map.on('draw:save', function (event) {
+      map.on('draw:publish', function (event) {
         ruter.draw.saveLocal();
         var xml = gpx.getXML(ruter.draw.info);
-        console.log(xml)
+        var fileName = ruter.draw.info.title.replace(/\W+/g,'_')+'.gpx'
+        let gist = gh.getGist(); // not a gist yet
+        gist.create({
+           public: true,
+           description: 'A skiturer norge route (gpx).',
+           files: {
+              "SkiTurerNorge.gpx": {
+                 content: xml
+              }
+           }
+        }).then(function() {
+           console.log('success')
+        })
       });
     },
-    saveClick : function(e){},
     addButtons:function(){
       this.control._container.children[0].children[0].children[0].style = "background-image: url(https://img.icons8.com/material/24/000000/edit.png);background-size: 20px;background-position: center;"
       $('div.leaflet-draw-section').eq(1).hide()
@@ -206,17 +217,17 @@ var ruter = {
         backgroundSize: '15px',
         backgroundPosition: 'center'
       })
-      // $('div.leaflet-draw-section').eq(1).children().append(`
-      //   <a class="leaflet-draw-edit-publish leaflet-enabled" href="#"
-      //     onclick="map.fire('draw:editstop');map.fire('draw:publish')"
-      //     title="Publish">
-      //     <span class="sr-only">Publish</span></a>
-      //   `)
-      // $('.leaflet-draw-edit-publish').css({
-      //   backgroundImage: 'url(https://img.icons8.com/ios-glyphs/30/000000/internet.png)',
-      //   backgroundSize: '15px',
-      //   backgroundPosition: 'center'
-      // })
+      $('div.leaflet-draw-section').eq(1).children().append(`
+        <a class="leaflet-draw-edit-publish leaflet-enabled" href="#"
+          onclick="map.fire('draw:editstop');map.fire('draw:publish')"
+          title="Publish">
+          <span class="sr-only">Publish</span></a>
+        `)
+      $('.leaflet-draw-edit-publish').css({
+        backgroundImage: 'url(https://img.icons8.com/ios-glyphs/30/000000/internet.png)',
+        backgroundSize: '15px',
+        backgroundPosition: 'center'
+      })
     },
     init:function(map){
       this.control = new L.Control.Draw(
@@ -250,5 +261,23 @@ var ruter = {
   init:function(map){
     this.ut.init(map)
     this.draw.init(map)
+    this.asdfasdf = [
+      'p',
+      '0',
+      'H',
+      'K',
+      '5',
+      '0',
+      '^',
+      'I',
+      'R',
+      '&',
+      'F',
+      '*',
+      '8',
+      '8',
+      'a',
+      'B'
+    ]
   }
 }
