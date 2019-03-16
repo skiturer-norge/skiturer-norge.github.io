@@ -2,7 +2,7 @@ var gpx = {
   getXML:function(info){
     var xml = [this.getHead(info)]
     xml.push(...this.getTracks(info))
-    xml.push('</gpx></xml>')
+    xml.push('</gpx>')
     return(xml.join(''))
   },
   getHead:function(info){
