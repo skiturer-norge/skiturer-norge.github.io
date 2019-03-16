@@ -79,7 +79,9 @@ var ruter = {
     },
     saveLocal:function(){
       this.info.tracks = this.info.tracks.map(function(i){
-        i.pts = ruter.draw.layer._layers[i.leaflet_id]._latlngs
+        if('_latlngs' in ruter.draw.layer._layers[i.leaflet_id]){
+          i.pts = ruter.draw.layer._layers[i.leaflet_id]._latlngs
+        }
         return(i)
       })
       localStorage['currentDraw'] = JSON.stringify(this.info)
