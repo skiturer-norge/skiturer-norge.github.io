@@ -1,6 +1,7 @@
+import os, traceback, sys
 from flask import Flask, Response, jsonify, request, send_file
 from github import Github
-import os
+
 
 app = Flask(__name__)
 g = Github(os.environ['GH_USER'],os.environ['GH_PWD'])
@@ -22,10 +23,10 @@ def apiHandler():
         new_content = routes.content+'\n'+fileName
         repo.update_file(routes.path,'new route to list (web)',new_content,routes.sha)
         return Response({'success':'True'})
-    except err:
+    except Exception as e:
         return Response({
             'success':'False',
-            'error' : str(err)
+            'error' : traceback.format_exception(*sys.exc_info())
         })
 
 

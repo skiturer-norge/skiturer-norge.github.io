@@ -228,8 +228,9 @@ var ruter = {
         $.ajax({
             url: 'http://ec2-54-246-148-177.eu-west-1.compute.amazonaws.com/skiturer-norge/api/route/create',
             method: 'POST',
-            type: 'application/json',
-            content: JSON.stringify({
+            crossDomain: true,
+            dataType: 'json',
+            data: JSON.stringify({
               'name': name,
               'gpx': xml
             })
