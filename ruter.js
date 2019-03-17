@@ -78,6 +78,9 @@ var ruter = {
       return(htmlStr)
     },
     saveLocal:function(){
+      this.info.tracks = this.info.tracks.filter(function(i){
+        return(i['leaflet_id'] in ruter.draw.layer._layers)
+      });
       this.info.tracks = this.info.tracks.map(function(i){
         if('_latlngs' in ruter.draw.layer._layers[i.leaflet_id]){
           i.pts = ruter.draw.layer._layers[i.leaflet_id]._latlngs
@@ -155,6 +158,7 @@ var ruter = {
           })
         }).bindPopup(ruter.draw.popup).addTo(ruter.draw.layer);
         ruter.draw.info.tracks.push({ leaflet_id: newLine._leaflet_id, type: 'both', optionNo : (ruter.draw.info.tracks.length+1) });
+        ruter.draw.saveLocal()
       });
       map.on('draw:toolbarclosed', function (event) {
         $('div.leaflet-draw-section').eq(1).hide()
@@ -176,6 +180,9 @@ var ruter = {
         $('div.leaflet-draw-section').eq(1).hide()
         ruter.draw.saveLocal()
       });
+      map.on('draw:deleted ',function(){
+        ruter.draw.saveLocal()
+      });
       map.on('draw:save', function (event) {
         ruter.draw.saveLocal();
         var xml = gpx.getXML(ruter.draw.info);
@@ -185,13 +192,24 @@ var ruter = {
         a.setAttribute('download', fileName);
         a.click();
       });
-      map.on('draw:save', function (event) {
+      map.on('draw:publish', function (event) {
         ruter.draw.saveLocal();
         var xml = gpx.getXML(ruter.draw.info);
-        console.log(xml)
+        var fileName = ruter.draw.info.title.replace(/\W+/g,'_')+'.gpx'
+        let gist = gh.getGist(); // not a gist yet
+        gist.create({
+           public: true,
+           description: 'A skiturer norge route (gpx).',
+           files: {
+              "SkiTurerNorge.gpx": {
+                 content: xml
+              }
+           }
+        }).then(function() {
+           console.log('success')
+        })
       });
     },
-    saveClick : function(e){},
     addButtons:function(){
       this.control._container.children[0].children[0].children[0].style = "background-image: url(https://img.icons8.com/material/24/000000/edit.png);background-size: 20px;background-position: center;"
       $('div.leaflet-draw-section').eq(1).hide()
@@ -206,17 +224,17 @@ var ruter = {
         backgroundSize: '15px',
         backgroundPosition: 'center'
       })
-      // $('div.leaflet-draw-section').eq(1).children().append(`
-      //   <a class="leaflet-draw-edit-publish leaflet-enabled" href="#"
-      //     onclick="map.fire('draw:editstop');map.fire('draw:publish')"
-      //     title="Publish">
-      //     <span class="sr-only">Publish</span></a>
-      //   `)
-      // $('.leaflet-draw-edit-publish').css({
-      //   backgroundImage: 'url(https://img.icons8.com/ios-glyphs/30/000000/internet.png)',
-      //   backgroundSize: '15px',
-      //   backgroundPosition: 'center'
-      // })
+      $('div.leaflet-draw-section').eq(1).children().append(`
+        <a class="leaflet-draw-edit-publish leaflet-enabled" href="#"
+          onclick="map.fire('draw:editstop');map.fire('draw:publish')"
+          title="Publish">
+          <span class="sr-only">Publish</span></a>
+        `)
+      $('.leaflet-draw-edit-publish').css({
+        backgroundImage: 'url(https://img.icons8.com/ios-glyphs/30/000000/internet.png)',
+        backgroundSize: '15px',
+        backgroundPosition: 'center'
+      })
     },
     init:function(map){
       this.control = new L.Control.Draw(
