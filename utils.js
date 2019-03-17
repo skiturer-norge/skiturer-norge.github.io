@@ -90,9 +90,21 @@ var freezeMap = {
   },
 };
 
-function initView(){
+function initView(map){
+  map.on('moveend',function(){
+    let cent = map.getCenter();
+    var view = {
+          lat: cent.lat,
+          lng: cent.lng,
+          zoom: map.getZoom()
+    };
+    localStorage['currentView'] = JSON.stringify(view);
+  });
   bounds = localforage.getItem('bounds',function(b){
-    if(ruter.draw.info.tracks.length>0){
+    if('currentView' in localStorage){
+      view = JSON.parse(localStorage['currentView'])
+      map.setView([view.lat,view.lng],view.zoom)
+    }else if(ruter.draw.info.tracks.length>0){
       bounds = ruter.draw.getBounds()
       map.fitBounds([[bounds._southWest.lat,bounds._southWest.lng],[bounds._northEast.lat,bounds._northEast.lng]])
     }else if(b){
