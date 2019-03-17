@@ -6,7 +6,7 @@ app = Flask(__name__)
 g = Github(os.environ['GH_USER'],os.environ['GH_PWD'])
 repo = g.get_repo("skiturer-norge/skiturer-norge.github.io")
 
-@app.route('api/skiturer-norge/route',methods=['POST'])
+@app.route('/api/skiturer-norge/route',methods=['POST'])
 def apiHandler():
     post = loads(request.data)
     fileSaveName = ''.join([i if i.isalnum() else '_' for i in post['name']])
