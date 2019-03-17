@@ -376,6 +376,8 @@ var ruter = {
       if(localStorage['version'] != map.options.version){
         localStorage.clear()
       }
+    }else{
+      localStorage.clear()
     }
     localStorage['version'] = map.options.version
   },
