@@ -1,6 +1,6 @@
 var ruter = {
   ut : {
-    layer : new L.FeatureGroup(),
+    features : new L.FeatureGroup(),
     turPopup :function (tur){
         return("<div><a target='_bank' href='"+tur.href+"'>"+tur.name+"</a></div>")
     },
@@ -21,16 +21,16 @@ var ruter = {
           weight:2,
           color:'rgb(0, 140, 255)',
         })
-      }).addTo(ruter.ut.layer)
+      }).addTo(ruter.ut.features)
     },
     addHytta : function(hytta){
         L.marker( hytta.points,{
           weight:3,
           color:'rgb(162, 0, 0)'
-        }).bindPopup(ruter.ut.hyttaPopup(hytta)).addTo(ruter.ut.layer)
+        }).bindPopup(ruter.ut.hyttaPopup(hytta)).addTo(ruter.ut.features)
     },
     init : function(map){
-      this.layer.addTo(map)
+      this.features.addTo(map)
         // ruter
         if('ut_ruter' in localStorage){
           JSON.parse(localStorage['ut_ruter']).map(ruter.ut.addTur)
@@ -59,31 +59,85 @@ var ruter = {
         };
     }
   },
+  user : {
+    features : new L.FeatureGroup(),
+    addGpxTur:function(gpxStr){
+      tur = gpx.parse(gpxStr)
+      tur.tracks.map(function(el){
+        L.polyline( el.pts, {
+          weight:2,
+          color:'rgb(255, 0, 255)'
+        }).bindPopup(ruter.user.popup(tur)).on('mouseover', function (e) {
+          e.target.setStyle({
+            weight:4
+          });
+        }).on('mouseout', function (e) {
+          e.target.setStyle({
+            weight:2
+          })
+        }).addTo(ruter.user.features)
+
+      })
+    },
+    popup:function(tur){
+      let htmlStr = "<div class='userRuteInfo'>"+
+        "<h3 class='title'><span class='display'>"+tur['name']+"</span></h3>"+
+        // "<p>Option "+track.optionNo+"</p>"+
+        "<p class='description'><span class='display'>"+tur['desc']+"</span></p>"+
+        "</div>"
+      return(htmlStr)
+    },
+    init : function(){
+      this.features.addTo(map)
+
+      if('user_routes' in localStorage){
+        JSON.parse(localStorage['user_routes']).map(ruter.user.addTur)
+      }else{
+        $.ajax({
+          url:'./ruter/user_onload.txt',
+          method:'get',
+          success:function(data){
+            let routes = data.split('\n').filter(function(i){return(i[0]!='#' & i!='')})
+            routes.map(function(j){
+              $.ajax({
+                url:'./ruter/user/'+j,
+                method:'get',
+                dataType : 'text',
+                success:function(gpxStr){
+                  ruter.user.addGpxTur(gpxStr)
+                }
+              })
+            })
+          }
+        })
+      };
+    }
+  },
   draw: {
-    layer : new L.FeatureGroup(),
-    info : {
-       title: 'New route',
-       description: 'This is an empty description',
+    features : new L.FeatureGroup(),
+    infoTemplate : {
+       name: 'New route',
+       desc: 'This is an empty description',
        tracks : []
     },
     popup:function(el){
       let track = ruter.draw.info.tracks.filter(function(i){return(i.leaflet_id==el._leaflet_id)})[0]
       let htmlStr = "<div class='userRuteInfo'>"+
-        "<h3 class='title'><span class='display'>"+ruter.draw.info['title']+"</span><span class='ruteToggle edit title' onclick='ruter.draw.infoToggle(event)'> 	&#9997;</span></h3>"+
-        "<h3 class='title input' style='display:none;'><input type='text' value='"+ruter.draw.info['title']+"'></input><span class='ruteToggle save' onclick='ruter.draw.infoToggle(event)'> &#128190;</span></h3>"+
+        "<h3 class='title'><span class='display'>"+ruter.draw.info['name']+"</span><span class='ruteToggle edit title' onclick='ruter.draw.infoToggle(event)'> 	&#9997;</span></h3>"+
+        "<h3 class='title input' style='display:none;'><input type='text' value='"+ruter.draw.info['name']+"'></input><span class='ruteToggle save' onclick='ruter.draw.infoToggle(event)'> &#128190;</span></h3>"+
         "<p>Option "+track.optionNo+" <select onchange='ruter.draw.typeChange(event)' class='type leaflet_id_"+track.leaflet_id+"' value='"+track.type+"' class='downhillCheckbox'><option value='both'>Up & Downhill</option><option value='downhill'>Downhill only</option></select></p>"+
-        "<p class='description'><span class='display'>"+ruter.draw.info['description']+"</span><span class='ruteToggle edit description' onclick='ruter.draw.infoToggle(event)'> 	&#9997;</span></p>"+
-        "<p class='description input' style='display:none;'><textarea type='textarea' style='width:280px;height:70px;' value='"+ruter.draw.info['description']+"'></textarea><span class='ruteToggle save description' onclick='ruter.draw.infoToggle(event)'> 	&#128190;</span></p>"
+        "<p class='description'><span class='display'>"+ruter.draw.info['desc']+"</span><span class='ruteToggle edit description' onclick='ruter.draw.infoToggle(event)'> 	&#9997;</span></p>"+
+        "<p class='description input' style='display:none;'><textarea type='textarea' style='width:280px;height:70px;' value='"+ruter.draw.info['desc']+"'></textarea><span class='ruteToggle save description' onclick='ruter.draw.infoToggle(event)'> 	&#128190;</span></p>"
         "</div>"
       return(htmlStr)
     },
     saveLocal:function(){
       this.info.tracks = this.info.tracks.filter(function(i){
-        return(i['leaflet_id'] in ruter.draw.layer._layers)
+        return(i['leaflet_id'] in ruter.draw.features._layers)
       });
       this.info.tracks = this.info.tracks.map(function(i){
-        if('_latlngs' in ruter.draw.layer._layers[i.leaflet_id]){
-          i.pts = ruter.draw.layer._layers[i.leaflet_id]._latlngs
+        if('_latlngs' in ruter.draw.features._layers[i.leaflet_id]){
+          i.pts = ruter.draw.features._layers[i.leaflet_id]._latlngs
         }
         return(i)
       })
@@ -136,7 +190,7 @@ var ruter = {
           e.target.setStyle({
             weight:2
           })
-        }).bindPopup(ruter.draw.popup).addTo(ruter.draw.layer);
+        }).bindPopup(ruter.draw.popup).addTo(ruter.draw.features);
         i.leaflet_id = newLine._leaflet_id;
         return(i)
       })
@@ -164,12 +218,12 @@ var ruter = {
       leaflet_id = parseInt(e.target.classList[1].replace('leaflet_id_',''))
       ruter.draw.info.tracks.filter(function(i){return(i.leaflet_id==leaflet_id)})[0]['type'] = e.target.value
       if(e.target.value=='downhill'){
-        this.layer._layers[leaflet_id].setStyle({
+        this.features._layers[leaflet_id].setStyle({
           dashArray:'12, 4',
           lineCap:'squared'
         })
       }else{
-        this.layer._layers[leaflet_id].setStyle({
+        this.features._layers[leaflet_id].setStyle({
           dashArray:''
         })
       }
@@ -185,7 +239,7 @@ var ruter = {
           e.target.setStyle({
             weight:2
           })
-        }).bindPopup(ruter.draw.popup).addTo(ruter.draw.layer);
+        }).bindPopup(ruter.draw.popup).addTo(ruter.draw.features);
         ruter.draw.info.tracks.push({ leaflet_id: newLine._leaflet_id, type: 'both', optionNo : (ruter.draw.info.tracks.length+1) });
         ruter.draw.saveLocal()
       });
@@ -215,7 +269,7 @@ var ruter = {
       map.on('draw:save', function (event) {
         ruter.draw.saveLocal();
         var xml = gpx.getXML(ruter.draw.info);
-        var fileName = ruter.draw.info.title.replace(/\W+/g,'_')+'.gpx'
+        var fileName = ruter.draw.info.name.replace(/\W+/g,'_')+'.gpx'
         var a = document.createElement('a');
         a.setAttribute('href', 'data:text/xml;charset=utf-8,' + encodeURIComponent(xml));
         a.setAttribute('download', fileName);
@@ -224,7 +278,7 @@ var ruter = {
       map.on('draw:publish', function (event) {
         ruter.draw.saveLocal();
         var xml = gpx.getXML(ruter.draw.info);
-        var name = ruter.draw.info.title.replace(/\W+/g,'_');
+        var name = ruter.draw.info.name.replace(/\W+/g,'_');
         $.ajax({
             url: 'http://ec2-54-246-148-177.eu-west-1.compute.amazonaws.com/skiturer-norge/api/route/create',
             method: 'POST',
@@ -234,10 +288,17 @@ var ruter = {
               'gpx': xml
             }),
             success: function(){
-              localStorage.removeItem('currentDraw')
+              ruter.draw.reset()
             }
         })
       });
+    },
+    reset:function(){
+      ruter.draw.info.tracks.map(function(i){
+        ruter.draw.features.removeLayer(i.leaflet_id)
+      })
+      this.info = JSON.parse(JSON.stringify(ruter.draw.infoTemplate))
+      localStorage.removeItem('currentDraw')
     },
     addButtons:function(){
       this.control._container.children[0].children[0].children[0].style = "background-image: url(https://img.icons8.com/material/24/000000/edit.png);background-size: 20px;background-position: center;"
@@ -266,6 +327,7 @@ var ruter = {
       })
     },
     init:function(map){
+      this.info = JSON.parse(JSON.stringify(this.infoTemplate))
       var MyCustomMarker = L.Icon.extend({
             options: {
                 shadowUrl: null,
@@ -296,10 +358,10 @@ var ruter = {
           }
         },
         edit: {
-            featureGroup: this.layer,
+            featureGroup: this.features,
         }
       });
-      this.layer.addTo(map)
+      this.features.addTo(map)
       this.control.addTo(map);
       this.addEvents(map);
       this.addButtons();
@@ -307,7 +369,8 @@ var ruter = {
     }
   },
   init:function(map){
-    this.ut.init(map)
-    this.draw.init(map)
+    this.ut.init(map);
+    this.user.init(map);
+    this.draw.init(map);
   }
 }
