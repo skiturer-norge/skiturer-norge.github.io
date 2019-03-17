@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+      <gpx
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns="http://www.topografix.com/GPX/1/1"
+      xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd"
+      version="1.1"
+      creator="https://skiturer-norge.github.io"
+      >
+    <metadata>
+      <name>Jordalen I</name>
+      <desc></desc>
+      <time>2019-03-17T16:21:05.983Z</time>
+    </metadata><trk>
+        <name>Option 2</name>
+        <cmt>both</cmt>
+        <trkseg><trkpt lat="60.88452291698597" lon="6.722800384741277" ></trkpt><trkpt lat="60.884382935990985" lon="6.7235710797831425" ></trkpt><trkpt lat="60.88482134189658" lon="6.725817471742631" ></trkpt><trkpt lat="60.88517909329241" lon="6.727883778512479" ></trkpt><trkpt lat="60.884549722221145" lon="6.7306866869330415" ></trkpt><trkpt lat="60.88397988436207" lon="6.73495039343834" ></trkpt><trkpt lat="60.88265093008167" lon="6.736927516758443" ></trkpt><trkpt lat="60.88096167850899" lon="6.73820659518242" ></trkpt><trkpt lat="60.879910623281425" lon="6.743207909166814" ></trkpt><trkpt lat="60.87805528438629" lon="6.746947243809701" ></trkpt><trkpt lat="60.877110196504546" lon="6.749971769750119" ></trkpt><trkpt lat="60.875734776042776" lon="6.749644875526428" ></trkpt><trkpt lat="60.87555462404509" lon="6.752298921346665" ></trkpt><trkpt lat="60.87773808259551" lon="6.759157329797745" ></trkpt></trkseg>
+      </trk></gpx>
