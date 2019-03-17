@@ -25,7 +25,7 @@ def apiHandler():
     path = os.path.join('ruter/user/',fileName)
     repo.create_file(path,'new route (web)',post['gpx'])
     routes = repo.get_contents('ruter/user_onload.txt')
-    new_content = base64.b64decode(routes.content)+'\n'+fileName
+    new_content = base64.b64decode(routes.content).decode('utf8')+'\n'+fileName
     repo.update_file(routes.path,'new route to list (web)',new_content,routes.sha)
     return jsonify({'success':'True'})
 
