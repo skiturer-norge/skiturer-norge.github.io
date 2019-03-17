@@ -33,13 +33,14 @@ var ruter = {
       this.features.addTo(map)
         // ruter
         if('ut_ruter' in localStorage){
-          JSON.parse(localStorage['ut_ruter']).map(ruter.ut.addTur)
+          let b64 = decodeURIComponent(escape(window.atob(localStorage['ut_ruter'])));
+          JSON.parse(b64).map(ruter.ut.addTur)
         }else{
           $.ajax({
             url:'./ruter/ut/skiturer.json',
             method:'get',
             success:function(data){
-              localStorage['ut_ruter'] = JSON.stringify(data)
+              localStorage['ut_ruter'] = window.btoa(unescape(encodeURIComponent(data)))
               data.map(ruter.ut.addTur)
             }
           })
