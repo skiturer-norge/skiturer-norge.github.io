@@ -268,5 +268,23 @@ var ruter = {
   init:function(map){
     this.ut.init(map)
     this.draw.init(map)
+    this.asdfasdf = [
+      'p',
+      '0',
+      'H',
+      'K',
+      '5',
+      '0',
+      '^',
+      'I',
+      'R',
+      '&',
+      'F',
+      '*',
+      '8',
+      '8',
+      'a',
+      'B'
+    ]
   }
 }
