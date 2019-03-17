@@ -35,14 +35,13 @@ var ruter = {
         if('ut_ruter' in localStorage){
           var s = LZString.decompress(localStorage['ut_ruter'])
           JSON.parse(s).map(ruter.ut.addTur)
+          console.log('Routes decompressed')
         }else{
           $.ajax({
             url:'./ruter/ut/skiturer.json',
             method:'get',
             success:function(data){
-              console.log(JSON.stringify(data).length)
               localStorage['ut_ruter'] = LZString.compress(JSON.stringify(data));
-              console.log(localStorage['ut_ruter'].length)
               data.map(ruter.ut.addTur)
             }
           })
