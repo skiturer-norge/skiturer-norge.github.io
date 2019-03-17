@@ -24,9 +24,9 @@ def apiHandler():
         routes = repo.get_contents('ruter/user_onload.txt')
         new_content = routes.content+'\n'+fileName
         repo.update_file(routes.path,'new route to list (web)',new_content,routes.sha)
-        return Response({'success':'True'})
+        return jsonify({'success':'True'})
     except Exception as e:
-        return Response({
+        return jsonify({
             'success':'False',
             'error' : traceback.format_exception(*sys.exc_info())
         })
