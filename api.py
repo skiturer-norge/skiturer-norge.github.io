@@ -4,7 +4,6 @@ from flask_cors import CORS
 from github import Github
 
 
-
 app = Flask(__name__)
 CORS(app)
 g = Github(os.environ['GH_USER'],os.environ['GH_PWD'])
