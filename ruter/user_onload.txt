@@ -1,2 +1,2 @@
 # list of gpx files to add on page load
-1235-Byrkefjellet.gpx
+a9d8d2-Byrkefjellet.gpx

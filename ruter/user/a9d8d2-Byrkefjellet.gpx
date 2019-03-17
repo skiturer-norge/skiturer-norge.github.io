@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+      <gpx
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns="http://www.topografix.com/GPX/1/1"
+      xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd"
+      version="1.1"
+      creator="https://skiturer-norge.github.io"
+      >
+    <metadata>
+      <name>Byrkefjellet</name>
+      <desc>Leave bus at Wallemtunet</desc>
+      <time>2019-03-16T20:25:39.244Z</time>
+    </metadata><trk>
+        <name>Option 1</name>
+        <cmt>both</cmt>
+        <trkseg><trkpt lat="60.38874477829423" lon="5.974353365600109" ></trkpt><trkpt lat="60.38939558351905" lon="5.973966289311648" ></trkpt><trkpt lat="60.39161834518231" lon="5.969815067946911" ></trkpt><trkpt lat="60.39219596007446" lon="5.969800986349584" ></trkpt><trkpt lat="60.39238429973819" lon="5.971522629261018" ></trkpt><trkpt lat="60.39324001398869" lon="5.97115768119693" ></trkpt><trkpt lat="60.39343041811728" lon="5.972601715475322" ></trkpt><trkpt lat="60.39361684578715" lon="5.9741656109690675" ></trkpt><trkpt lat="60.39549779238969" lon="5.9742722287774095" ></trkpt><trkpt lat="60.396470273367804" lon="5.973590780049564" ></trkpt><trkpt lat="60.39750127188692" lon="5.973171014338733" ></trkpt><trkpt lat="60.398686589992515" lon="5.972019340842963" ></trkpt><trkpt lat="60.39927095232937" lon="5.9752929769456395" ></trkpt><trkpt lat="60.40054049862378" lon="5.9769366681575775" ></trkpt><trkpt lat="60.401815874118796" lon="5.976904314011336" ></trkpt><trkpt lat="60.40394679805754" lon="5.97275158390403" ></trkpt><trkpt lat="60.40575288633256" lon="5.970010869204998" ></trkpt></trkseg>
+      </trk></gpx>
