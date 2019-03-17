@@ -175,9 +175,11 @@ areaSelect.hide()
 // // search
 new L.Control.GPlaceAutocomplete({
           callback: function(place){
-              console.log(place)
-              var loc = place.geometry.location;
-              map.setView([loc.lat(), loc.lng()],14);
+              // var loc = place.geometry.location;
+              // map.setView([loc.lat(), loc.lng()],14);
+              let view = place.geometry.viewport;
+              let bounds = [[view.ma.j,view.ga.j], [view.ma.l,view.ga.l]]
+              map.fitBounds(bounds);
           },
           collapsed_mode:true
       }).addTo(map);
