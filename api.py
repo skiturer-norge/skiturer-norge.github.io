@@ -1,5 +1,5 @@
 import os, traceback, sys, json
-from flask import Flask, jsonify, request, send_file
+from flask import Flask, jsonify, request, Response, send_from_directory
 from flask_cors import CORS
 from github import Github
 
@@ -11,26 +11,23 @@ repo = g.get_repo("skiturer-norge/skiturer-norge.github.io")
 
 @app.route('/',methods=['GET'])
 def home():
-    return('<h1>Personal API Server</h1>')
+    return('<h1>Personal API</h1>')
+
+@app.route('/<path:file>',methods=['GET'])
+def index(file):
+    return(send_from_directory('.',file))
 
 @app.route('/skiturer-norge/api/route/create',methods=['POST'])
 def apiHandler():
-    try:
-        post = json.loads(request.data)
-        fileSaveName = ''.join([i if i.isalnum() else '_' for i in post['name']])
-        fileName = fileSaveName+'-'+os.urandom(3).hex()+'.gpx'
-        path = os.path.join('ruter/user/',fileName)
-        repo.create_file(path,'new route (web)',post['gpx'])
-        routes = repo.get_contents('ruter/user_onload.txt')
-        new_content = routes.content+'\n'+fileName
-        repo.update_file(routes.path,'new route to list (web)',new_content,routes.sha)
-        return jsonify({'success':'True'})
-    except Exception as e:
-        return jsonify({
-            'success':'False',
-            'error' : traceback.format_exception(*sys.exc_info())
-        })
-
+    post = json.loads(request.get_data())
+    fileSaveName = ''.join([i if i.isalnum() else '_' for i in post['name']])
+    fileName = fileSaveName+'-'+os.urandom(3).hex()+'.gpx'
+    path = os.path.join('ruter/user/',fileName)
+    repo.create_file(path,'new route (web)',post['gpx'])
+    routes = repo.get_contents('ruter/user_onload.txt')
+    new_content = routes.content+'\n'+fileName
+    repo.update_file(routes.path,'new route to list (web)',new_content,routes.sha)
+    return jsonify({'success':'True'})
 
 if __name__=='__main__':
-    app.run(port=8000)
+    app.run(port=8000,debug=True)
