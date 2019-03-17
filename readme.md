@@ -1,7 +1,7 @@
 # Skiturer i Norge
 
 A crowd-sourcing web-app for ski-touring in Norway (early development phase). Let's share our experiences for the joy of ski-touring!
-
+ 
 ## Features
 * Overview: Direct display of all routes
 * Steepness: Overlay with classes of steepness
