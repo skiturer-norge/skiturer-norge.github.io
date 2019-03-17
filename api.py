@@ -7,6 +7,7 @@ g = Github(os.environ['GH_USER'],os.environ['GH_PWD'])
 repo = g.get_repo("skiturer-norge/skiturer-norge.github.io")
 
 @app.route('/',methods=['GET'])
+def home():
     return('<h1>Personal API Server</h1>')
 
 @app.route('/skiturer-norge/api/route/create',methods=['POST'])

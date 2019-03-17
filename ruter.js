@@ -226,7 +226,7 @@ var ruter = {
         var xml = gpx.getXML(ruter.draw.info);
         var name = ruter.draw.info.title.replace(/\W+/g,'_');
         $.ajax({
-            url: 'https://ec2-54-246-148-177.eu-west-1.compute.amazonaws.com/api/skiturer-norge/route',
+            url: 'https://ec2-54-246-148-177.eu-west-1.compute.amazonaws.com/skiturer-norge/api/route/create',
             method: 'POST',
             type: 'application/json',
             content: JSON.stringify({
