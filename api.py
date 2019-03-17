@@ -1,5 +1,5 @@
-import os, traceback, sys
-from flask import Flask, Response, jsonify, request, send_file
+import os, traceback, sys, json
+from flask import Flask, jsonify, request, send_file
 from flask_cors import CORS
 from github import Github
 
@@ -16,7 +16,7 @@ def home():
 @app.route('/skiturer-norge/api/route/create',methods=['POST'])
 def apiHandler():
     try:
-        post = loads(request.data)
+        post = json.loads(request.data)
         fileSaveName = ''.join([i if i.isalnum() else '_' for i in post['name']])
         fileName = fileSaveName+'-'+os.urandom(3).hex()+'.gpx'
         path = os.path.join('ruter/user/',fileName)
