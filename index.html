@@ -31,8 +31,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.14/leaflet.draw.js"></script>
   <!-- gpx -->
   <script src="./gpx.js"></script>
-  <!-- github -->
-  <!-- <script src="https://unpkg.com/github-api/dist/GitHub.bundle.min.js"></script> -->
 
   <!-- vector grid -->
   <!-- <script type="text/javascript"  src="https://unpkg.com/leaflet.vectorgrid@latest/dist/Leaflet.VectorGrid.bundled.js"></script> -->
@@ -200,6 +198,7 @@ localforage.getItem('bounds').then(function(bounds){
 
 // load routes
 ruter.init(map)
+
 
 // set location
 map.setView([60.6585, 6.4653], 12);
