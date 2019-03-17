@@ -77,7 +77,8 @@ L.Icon.Default.prototype.options.iconAnchor = [oldOptions.iconAnchor[0]/2.0 ,old
 L.Icon.Default.prototype.options.shadowSize = [0,0] ;
 
 // init map
-var map = L.map('mapid',{'zoomControl':false})
+var version = 'v0.3' // increase version to trigger storage reset
+var map = L.map('mapid',{'zoomControl':false, version:version})
 var zoom = L.control.zoom({'position':'bottomright'}).addTo(map)
 var scale = L.control.scale({'imperial':false}).addTo(map)
 var rect

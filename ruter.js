@@ -371,7 +371,16 @@ var ruter = {
       this.loadLocal();
     }
   },
+  checkVersion:function(map){
+    if('version' in localStorage){
+      if(localStorage['version'] != map.options.version){
+        localStorage.clear()
+      }
+    }
+    localStorage['version'] = map.options.version
+  },
   init:function(map){
+    this.checkVersion(map)
     this.ut.init(map);
     this.user.init(map);
     this.draw.init(map);
