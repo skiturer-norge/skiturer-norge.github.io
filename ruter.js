@@ -237,6 +237,14 @@ var ruter = {
       })
     },
     init:function(map){
+      var MyCustomMarker = L.Icon.extend({
+            options: {
+                shadowUrl: null,
+                iconAnchor: new L.Point(12, 12),
+                iconSize: new L.Point(24, 24),
+                iconUrl: 'link/to/image.png'
+            }
+        });
       this.control = new L.Control.Draw(
         {
         position:'topright',
@@ -251,7 +259,11 @@ var ruter = {
               weight : 2,
               color: 'red',
               opacity: 1
-            }
+            },
+            icon: new L.DivIcon({
+              iconSize: new L.Point(5, 5),
+              className: 'leaflet-div-icon leaflet-editing-icon my-own-class'
+            })
           }
         },
         edit: {
@@ -268,23 +280,5 @@ var ruter = {
   init:function(map){
     this.ut.init(map)
     this.draw.init(map)
-    this.asdfasdf = [
-      'p',
-      '0',
-      'H',
-      'K',
-      '5',
-      '0',
-      '^',
-      'I',
-      'R',
-      '&',
-      'F',
-      '*',
-      '8',
-      '8',
-      'a',
-      'B'
-    ]
   }
 }
