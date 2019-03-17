@@ -65,8 +65,10 @@ var tilesDb = {
         localforage.clear();
       }
     },
-    zoomToBounds:async function(){
-      bounds = await localforage.getItem('bounds')
+    zoomToBounds:async function(bounds=NULL){
+      if( typeof bounds == 'undefined'){
+          bounds = await localforage.getItem('bounds')
+      }
       map.fitBounds([[bounds._southWest.lat,bounds._southWest.lng],[bounds._northEast.lat,bounds._northEast.lng]])
     }
 };
@@ -86,4 +88,17 @@ var freezeMap = {
     map.scrollWheelZoom.enable();
     zoom._container.style.visibility='visible';
   },
+};
+
+function initView(){
+  bounds = localforage.getItem('bounds',function(b){
+    if(ruter.draw.info.tracks.length>0){
+      bounds = ruter.draw.getBounds()
+      map.fitBounds([[bounds._southWest.lat,bounds._southWest.lng],[bounds._northEast.lat,bounds._northEast.lng]])
+    }else if(b){
+      tilesDb.zoomToBounds(b)
+    }else{
+      map.setView([60.6585, 6.4653], 12);
+    }
+  })
 }

@@ -89,6 +89,35 @@ var ruter = {
       })
       localStorage['currentDraw'] = JSON.stringify(this.info)
     },
+    getTrackBounds : function(track){
+      return({
+        '_southWest' : {
+          'lat' : Math.min.apply(null,track.pts.map(function(j){return(j.lat)})),
+          'lng' : Math.min.apply(null,track.pts.map(function(j){return(j.lng)}))
+        },
+        '_northEast' : {
+          'lat' : Math.max.apply(null,track.pts.map(function(j){return(j.lat)})),
+          'lng' : Math.max.apply(null,track.pts.map(function(j){return(j.lng)}))
+        }
+      })
+    },
+    aggBounds : function(bounds){
+      return({
+        '_southWest' : {
+          'lat' : Math.min.apply(null,bounds.map(function(j){return(j._southWest.lat)})),
+          'lng' : Math.min.apply(null,bounds.map(function(j){return(j._southWest.lng)}))
+        },
+        '_northEast' : {
+          'lat' : Math.max.apply(null,bounds.map(function(j){return(j._northEast.lat)})),
+          'lng' : Math.max.apply(null,bounds.map(function(j){return(j._northEast.lng)}))
+        }
+      })
+    },
+    getBounds:function(){
+      let trackBounds = this.info.tracks.map(this.getTrackBounds)
+      let drawBounds = this.aggBounds(trackBounds)
+      return(drawBounds)
+    },
     loadLocal:function(){
       if(!('currentDraw' in localStorage)){
         return
@@ -195,18 +224,15 @@ var ruter = {
       map.on('draw:publish', function (event) {
         ruter.draw.saveLocal();
         var xml = gpx.getXML(ruter.draw.info);
-        var fileName = ruter.draw.info.title.replace(/\W+/g,'_')+'.gpx'
-        let gist = gh.getGist(); // not a gist yet
-        gist.create({
-           public: true,
-           description: 'A skiturer norge route (gpx).',
-           files: {
-              "SkiTurerNorge.gpx": {
-                 content: xml
-              }
-           }
-        }).then(function() {
-           console.log('success')
+        var name = ruter.draw.info.title.replace(/\W+/g,'_');
+        $.ajax({
+            url: 'https://ec2-54-246-148-177.eu-west-1.compute.amazonaws.com/api/skiturer-norge/route',
+            method: 'POST',
+            type: 'application/json',
+            content: JSON.stringify({
+              'name': name,
+              'gpx': xml
+            })
         })
       });
     },

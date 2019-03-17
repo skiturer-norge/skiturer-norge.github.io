@@ -59,7 +59,7 @@
   <div class='map' id='mapid'></div>
 </body>
 <script>
-// display icon
+// display logo
 var win10p = screen.width*(15/100)
 var logoWidth = Math.min(win10p, 80)
 var logoHeight = logoWidth * Math.sqrt(3) / 2
@@ -199,14 +199,8 @@ localforage.getItem('bounds').then(function(bounds){
 // load routes
 ruter.init(map)
 
-
 // set location
-map.setView([60.6585, 6.4653], 12);
-// if (navigator.geolocation) {
-//   navigator.geolocation.getCurrentPosition(function(position){
-//     map.setView([position.coords.latitude, position.coords.longitude], 10);
-//   });
-// }
+initView()
 
 // localforage.clear()
 
