@@ -1,9 +1,12 @@
 import os, traceback, sys
 from flask import Flask, Response, jsonify, request, send_file
+from flask_cors import CORS
 from github import Github
 
 
+
 app = Flask(__name__)
+app = CORS(app)
 g = Github(os.environ['GH_USER'],os.environ['GH_PWD'])
 repo = g.get_repo("skiturer-norge/skiturer-norge.github.io")
 
