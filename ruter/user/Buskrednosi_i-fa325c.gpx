@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+      <gpx
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns="http://www.topografix.com/GPX/1/1"
+      xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd"
+      version="1.1"
+      creator="https://skiturer-norge.github.io"
+      >
+    <metadata>
+      <name>Buskrednosi i</name>
+      <desc>This is a publishing test</desc>
+      <time>2019-03-19T23:12:29.328Z</time>
+    </metadata><trk>
+        <name>Option 1</name>
+        <cmt>both</cmt>
+        <trkseg><trkpt lat="61.51294935556639" lon="7.315371371805669" ></trkpt><trkpt lat="61.512799996144146" lon="7.317650914192201" ></trkpt><trkpt lat="61.511012025003836" lon="7.322696316987277" ></trkpt><trkpt lat="61.50976915617604" lon="7.326832115650178" ></trkpt><trkpt lat="61.50970438457994" lon="7.332312539219857" ></trkpt><trkpt lat="61.51118730045563" lon="7.339065838605166" ></trkpt><trkpt lat="61.515171352040106" lon="7.352361548691989" ></trkpt><trkpt lat="61.51621773256886" lon="7.3574897646904" ></trkpt><trkpt lat="61.51779539163806" lon="7.359362952411176" ></trkpt><trkpt lat="61.518560368369215" lon="7.360934056341649" ></trkpt><trkpt lat="61.51941334039384" lon="7.359728906303645" ></trkpt><trkpt lat="61.51980992044652" lon="7.356922142207623" ></trkpt><trkpt lat="61.52094695239793" lon="7.355261016637088" ></trkpt><trkpt lat="61.52163567424634" lon="7.351662162691356" ></trkpt><trkpt lat="61.523668817453" lon="7.3513258807361135" ></trkpt><trkpt lat="61.52409651514905" lon="7.347770780324937" ></trkpt><trkpt lat="61.52514331459619" lon="7.345232740044595" ></trkpt><trkpt lat="61.52632115160434" lon="7.3436138592660445" ></trkpt><trkpt lat="61.52820054718031" lon="7.343688961118461" ></trkpt><trkpt lat="61.52979406026066" lon="7.342477943748237" ></trkpt><trkpt lat="61.53110844725534" lon="7.340335026383401" ></trkpt><trkpt lat="61.53266833062648" lon="7.339088134467603" ></trkpt><trkpt lat="61.53402510416973" lon="7.337941490113736" ></trkpt><trkpt lat="61.5354388662767" lon="7.336915042251349" ></trkpt><trkpt lat="61.537533183759706" lon="7.335159033536912" ></trkpt></trkseg>
+      </trk></gpx>
