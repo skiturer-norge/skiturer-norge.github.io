@@ -21,7 +21,7 @@ var ruter = {
           weight:2,
           color:'rgb(0, 140, 255)',
         })
-      }).addTo(ruter.ut.features)
+      }).addTo(map)
     },
     addHytta : function(hytta){
         L.marker( hytta.points,{
@@ -201,7 +201,12 @@ var ruter = {
       var targetType = e.target.classList.contains('description') ? 'description' : 'title';
       if(e.target.classList.contains('save')){
         let newVal = $('.'+targetType+'.input').children().eq(0).val()
-        ruter.draw.info[targetType] = newVal
+        if(targetType=='title'){
+          ruter.draw.info['name'] = newVal
+        }else if(targetType=='description'){
+          ruter.draw.info['desc'] = newVal
+        }
+        
         $('.'+targetType+' .display').html(newVal)
         ruter.draw.saveLocal()
       }
@@ -282,7 +287,7 @@ var ruter = {
         var xml = gpx.getXML(ruter.draw.info);
         var name = ruter.draw.info.name.replace(/\W+/g,'_');
         $.ajax({
-            url: 'http://ec2-54-246-148-177.eu-west-1.compute.amazonaws.com/skiturer-norge/api/route/create',
+            url: 'https://api.zivil.info/skiturer-norge/api/route/create',
             method: 'POST',
             crossDomain: true,
             data: JSON.stringify({
