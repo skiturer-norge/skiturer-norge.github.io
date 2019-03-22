@@ -1,18 +1,18 @@
-/* 
- * Leaflet Control GPS v1.7.6 - 2018-05-28 
- * 
- * Copyright 2018 Stefano Cudini 
- * stefano.cudini@gmail.com 
- * http://labs.easyblog.it/ 
- * 
- * Licensed under the MIT license. 
- * 
- * Demos: 
- * http://labs.easyblog.it/maps/leaflet-gps/ 
- * 
- * Source: 
- * git@github.com:stefanocudini/leaflet-gps.git 
- * 
+/*
+ * Leaflet Control GPS v1.7.6 - 2018-05-28
+ *
+ * Copyright 2018 Stefano Cudini
+ * stefano.cudini@gmail.com
+ * http://labs.easyblog.it/
+ *
+ * Licensed under the MIT license.
+ *
+ * Demos:
+ * http://labs.easyblog.it/maps/leaflet-gps/
+ *
+ * Source:
+ * git@github.com:stefanocudini/leaflet-gps.git
+ *
  */
 
 .leaflet-container .leaflet-control-gps {
@@ -25,39 +25,40 @@
 	border-radius: 4px;
 	/*background-color: rgba(0, 0, 0, 0.25);*/
 	background-color: rgba(255, 255, 255, 0.8);
-	z-index:1000;	
+	z-index:1000;
 	/*box-shadow: 0 1px 7px rgba(0,0,0,0.65);*/
-	border: 2px solid rgba(0,0,0,0.2);
+	/* border: 2px solid rgba(0,0,0,0.2); */
 	background-clip: padding-box;
 	margin-left:10px;
 	margin-top:10px;
 }
 .leaflet-control-gps .gps-button {
 	display:block;
-	float:left;
-	width:22px;
-	height:22px;
-	background-image: url('../images/gps-icon.svg');
+	float: left;
+	width: 30px;
+	height: 30px;
+	background-image: url(../images/gps-icon.svg);
 	background-repeat: no-repeat;
-	background-position: 1px 1px;
+	background-position: 3px 3px;
 	background-color: #fff;
-	border-radius:4px;
-	padding: 2px;
-	margin: 2px;
+	border-radius: 4px;
 }
 .leaflet-control-gps .gps-button:hover,
 .leaflet-control-gps .gps-button.active:hover {
 	background-color: #f4f4f4;
+	width: 30px;
+	height: 30px;
 }
 .leaflet-control-gps .gps-button.loading,
 .leaflet-control-gps .gps-button.loading:hover {
-	background-position: 1px -28px;
+	background-position: 3px -23px;
 }
 .leaflet-control-gps .gps-button.active {
-	background-position: 1px -52px;
+	background-position: 3px -49px;
+
 }
 .leaflet-control-gps .gps-button.disabled {
-	background-position: 1px -24px;
+	background-position: 3px -23px;
 }
 
 .leaflet-control-gps .gps-alert {
@@ -72,5 +73,3 @@
 	background-color: rgba(255, 255, 255, 0.75);
 	border-radius:4px;
 }
-
-
