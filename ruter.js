@@ -206,7 +206,7 @@ var ruter = {
         }else if(targetType=='description'){
           ruter.draw.info['desc'] = newVal
         }
-        
+
         $('.'+targetType+' .display').html(newVal)
         ruter.draw.saveLocal()
       }
@@ -287,7 +287,7 @@ var ruter = {
         var xml = gpx.getXML(ruter.draw.info);
         var name = ruter.draw.info.name.replace(/\W+/g,'_');
         $.ajax({
-            url: 'https://api.zivil.info/skiturer-norge/api/route/create',
+            url: 'https://api.hvorvor.net/skiturer-norge/api/route/create',
             method: 'POST',
             crossDomain: true,
             data: JSON.stringify({
